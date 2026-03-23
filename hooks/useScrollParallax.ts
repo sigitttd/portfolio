@@ -1,7 +1,7 @@
 'use client'
 
 import { useScroll, useTransform, useReducedMotion, useMotionValue } from 'framer-motion'
-import type { MotionValue } from 'framer-motion'
+import type { MotionValue, UseScrollOptions } from 'framer-motion'
 import type React from 'react'
 
 export interface UseScrollParallaxOptions {
@@ -21,7 +21,7 @@ export function useScrollParallax(
 
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: offset as [string, string],
+    offset: offset as UseScrollOptions['offset'],
   })
 
   const parallax = useTransform(
