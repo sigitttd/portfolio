@@ -134,7 +134,7 @@ export default function ContactSection() {
 
               <div className="relative z-10 py-12 px-8 sm:px-12">
                 {/* Label */}
-                <motion.div
+                {/* <motion.div
                   initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -148,7 +148,7 @@ export default function ContactSection() {
                     className="w-1.5 h-1.5 rounded-full bg-electric-blue"
                   />
                   Available for work
-                </motion.div>
+                </motion.div> */}
 
                 {/* Main heading */}
                 <motion.h2

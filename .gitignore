@@ -1,4 +1,5 @@
 .next/
+.kiro/
 node_modules/
 build/
 dist/
