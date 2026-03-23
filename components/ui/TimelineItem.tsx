@@ -1,5 +1,6 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import type { TimelineEntry, Education } from '@/types'
 
 interface TimelineItemProps {
@@ -16,18 +17,32 @@ export default function TimelineItem({ item, index: _index }: TimelineItemProps)
   return (
     <div className="relative pl-8 pb-10 last:pb-0">
       {/* Vertical line */}
-      <div className="absolute left-[7px] top-4 bottom-0 w-px bg-border-subtle last:hidden" />
+      <div className="absolute left-[7px] top-4 bottom-0 w-px bg-gradient-to-b from-electric-blue/40 via-border-subtle to-transparent last:hidden" />
 
-      {/* Dot */}
-      <div className="absolute left-0 top-1.5 w-3.5 h-3.5 rounded-full bg-electric-blue ring-4 ring-orbit-navy shadow-glow-sm" />
+      {/* Animated dot */}
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ type: 'spring', stiffness: 400, damping: 20, delay: 0.1 }}
+        className="absolute left-0 top-1.5 w-3.5 h-3.5 rounded-full bg-electric-blue ring-4 ring-orbit-navy shadow-glow-sm"
+      />
 
-      <div className="bg-surface border border-border-subtle rounded-xl p-5 hover:border-electric-blue/40 transition-colors duration-200">
+      <motion.div
+        whileHover={{ x: 4 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+        className="bg-surface/80 backdrop-blur-sm border border-border-subtle rounded-xl p-5
+          hover:border-electric-blue/40 hover:bg-surface hover:shadow-glow-sm
+          transition-colors duration-300 group"
+      >
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-2">
           <div>
-            <h4 className="text-text-primary font-semibold text-base leading-snug">{title}</h4>
+            <h4 className="text-text-primary font-semibold text-base leading-snug group-hover:text-electric-blue transition-colors duration-200">
+              {title}
+            </h4>
             <p className="text-electric-blue text-sm font-medium mt-0.5">{organization}</p>
           </div>
-          <span className="text-text-dim text-xs font-mono whitespace-nowrap mt-0.5 sm:mt-1 shrink-0">
+          <span className="text-text-dim text-xs font-mono whitespace-nowrap mt-0.5 sm:mt-1 shrink-0 bg-surface border border-border-subtle rounded-md px-2 py-0.5">
             {item.startDate} – {item.endDate}
           </span>
         </div>
@@ -59,13 +74,19 @@ export default function TimelineItem({ item, index: _index }: TimelineItemProps)
           <ul className="space-y-1.5 mt-2">
             {descriptions.map((bullet, i) => (
               <li key={i} className="flex items-start gap-2 text-text-muted text-sm">
-                <span className="mt-1.5 w-1 h-1 rounded-full bg-electric-blue/60 shrink-0" />
+                <motion.span
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 + i * 0.05 }}
+                  className="mt-1.5 w-1 h-1 rounded-full bg-electric-blue/60 shrink-0"
+                />
                 {bullet}
               </li>
             ))}
           </ul>
         )}
-      </div>
+      </motion.div>
     </div>
   )
 }

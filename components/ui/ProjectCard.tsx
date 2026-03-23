@@ -1,13 +1,13 @@
 'use client'
 
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 import type { Project } from '@/types'
 
 interface ProjectCardProps {
   project: Project
 }
 
-// Gradient placeholders for projects without images
 const PLACEHOLDER_GRADIENTS = [
   'from-blue-900/60 via-electric-blue/10 to-cyan-900/40',
   'from-indigo-900/60 via-purple-900/30 to-blue-900/40',
@@ -16,13 +16,17 @@ const PLACEHOLDER_GRADIENTS = [
 ]
 
 function getGradient(id: string) {
-  const index = id.charCodeAt(0) % PLACEHOLDER_GRADIENTS.length
-  return PLACEHOLDER_GRADIENTS[index]
+  return PLACEHOLDER_GRADIENTS[id.charCodeAt(0) % PLACEHOLDER_GRADIENTS.length]
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <div className="group flex flex-col bg-surface rounded-2xl border border-border-subtle overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:border-electric-blue/50 hover:shadow-card-hover">
+    <motion.div
+      whileHover={{ y: -6 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+      className="group flex flex-col bg-surface/80 backdrop-blur-sm rounded-2xl border border-border-subtle overflow-hidden
+        hover:border-electric-blue/50 hover:shadow-card-hover transition-all duration-300 h-full"
+    >
       {/* Image / Placeholder */}
       <div className="relative w-full h-48 overflow-hidden">
         {project.imageUrl ? (
@@ -30,25 +34,24 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             src={project.imageUrl}
             alt={project.title}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 group-hover:scale-108"
           />
         ) : (
-          <div
-            className={`w-full h-full bg-gradient-to-br ${getGradient(project.id)} flex items-center justify-center`}
-          >
-            <svg
-              className="w-12 h-12 text-electric-blue/30"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1}
+          <div className={`w-full h-full bg-gradient-to-br ${getGradient(project.id)} flex items-center justify-center`}>
+            <motion.div
+              animate={{ rotate: [0, 5, -5, 0], scale: [1, 1.05, 1] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
+              <svg className="w-12 h-12 text-electric-blue/30" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </motion.div>
           </div>
         )}
-        {/* Overlay gradient at bottom of image */}
-        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-surface to-transparent" />
+        {/* Gradient overlay */}
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-surface to-transparent" />
+        {/* Hover shimmer */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
       </div>
 
       {/* Content */}
@@ -65,7 +68,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {project.techTags.map((tag) => (
             <span
               key={tag}
-              className="text-xs px-2 py-0.5 rounded-md bg-electric-blue/10 text-electric-blue border border-electric-blue/20 font-medium"
+              className="text-xs px-2 py-0.5 rounded-md bg-electric-blue/10 text-electric-blue border border-electric-blue/20 font-medium
+                hover:bg-electric-blue/20 transition-colors duration-150"
             >
               {tag}
             </span>
@@ -75,46 +79,87 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         {/* Links */}
         <div className="flex flex-wrap gap-2 mt-auto pt-2 border-t border-border-subtle">
           {project.githubUrl && (
-            <a
+            <motion.a
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border-subtle text-text-muted hover:border-electric-blue hover:text-electric-blue transition-all duration-150"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border-subtle text-text-muted
+                hover:border-electric-blue hover:text-electric-blue transition-all duration-150"
             >
               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
               </svg>
               GitHub
-            </a>
+            </motion.a>
           )}
           {project.liveUrl && (
-            <a
+            <motion.a
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border-subtle text-text-muted hover:border-electric-blue hover:text-electric-blue transition-all duration-150"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border-subtle text-text-muted
+                hover:border-electric-blue hover:text-electric-blue transition-all duration-150"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
               Live Demo
-            </a>
+            </motion.a>
           )}
           {project.publicationUrl && (
-            <a
+            <motion.a
               href={project.publicationUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border-subtle text-text-muted hover:border-electric-blue hover:text-electric-blue transition-all duration-150"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border-subtle text-text-muted
+                hover:border-electric-blue hover:text-electric-blue transition-all duration-150"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
               Publication
-            </a>
+            </motion.a>
+          )}
+          {project.documentationUrl && (
+            <motion.a
+              href={project.documentationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border-subtle text-text-muted
+                hover:border-electric-blue hover:text-electric-blue transition-all duration-150"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              Docs
+            </motion.a>
+          )}
+          {project.youtubeUrl && (
+            <motion.a
+              href={project.youtubeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-border-subtle text-text-muted
+                hover:border-electric-blue hover:text-electric-blue transition-all duration-150"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              YouTube
+            </motion.a>
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
