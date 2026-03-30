@@ -19,8 +19,13 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
   const projectList = projects ?? defaultProjects
   const [activeTab, setActiveTab] = useState<Tab>('data')
 
-  const featuredProjects = projectList.slice(0, 3)
-  const remainingProjects = projectList.slice(3).filter((p) => (p.type ?? 'data') === activeTab)
+  const dataProjects = projectList.filter((p) => p.type !== 'creative')
+  const creativeProjects = projectList.filter((p) => p.type === 'creative')
+
+  const featuredProjects = dataProjects.slice(0, 3)
+  const remainingProjects = activeTab === 'data'
+    ? dataProjects.slice(3)
+    : creativeProjects
 
   return (
     <div className="relative overflow-hidden">
@@ -41,7 +46,6 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
           />
         </AnimatedSection>
 
-        {/* Featured label */}
         <motion.p
           initial={{ opacity: 0, x: -12 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -53,7 +57,6 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
           Featured
         </motion.p>
 
-        {/* Featured grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-12">
           {featuredProjects.map((project, i) => (
             <AnimatedSection key={project.id} delay={i * 0.08}>
@@ -62,7 +65,6 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
           ))}
         </div>
 
-        {/* Tabs */}
         <div className="flex gap-2 mb-6">
           {(['data', 'creative'] as Tab[]).map((tab) => (
             <motion.button
@@ -88,7 +90,6 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
           ))}
         </div>
 
-        {/* Remaining projects */}
         <AnimatePresence mode="wait">
           {remainingProjects.length > 0 ? (
             <motion.div

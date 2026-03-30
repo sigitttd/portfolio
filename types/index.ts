@@ -1,4 +1,4 @@
-﻿export interface PersonalInfo {
+export interface PersonalInfo {
   name: string
   title: string
   tagline: string
@@ -16,12 +16,14 @@ export interface SkillCategory {
   skills: string[]
 }
 
+export type ProjectType = 'data' | 'creative'
+
 export interface Project {
   id: string
   title: string
   description: string
   techTags: string[]
-  type?: 'data' | 'creative'
+  type?: ProjectType
   imageUrl?: string
   githubUrl?: string
   liveUrl?: string

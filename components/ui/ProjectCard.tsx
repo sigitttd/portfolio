@@ -8,6 +8,24 @@ interface ProjectCardProps {
   project: Project
 }
 
+// Map old/missing image paths to actual available files in public/pictinporto
+const IMAGE_FALLBACK_MAP: Record<string, string> = {
+  '/pictinporto/image011.png': '/pictinporto/sasna.png',
+  '/pictinporto/image013.png': '/pictinporto/cna.png',
+  '/pictinporto/image016.png': '/pictinporto/ipm.png',
+  '/pictinporto/image024.jpg': '/pictinporto/logam.png',
+  '/pictinporto/image019.jpg': '/pictinporto/kim.png',
+  '/pictinporto/image021.png': '/pictinporto/cpb.png',
+  '/pictinporto/image037.png': '/pictinporto/dwh.png',
+  '/pictinporto/image026.png': '/pictinporto/pintus.png',
+  '/pictinporto/image036.png': '/pictinporto/intprdx.png',
+}
+
+function resolveImage(imageUrl?: string): string | undefined {
+  if (!imageUrl) return undefined
+  return IMAGE_FALLBACK_MAP[imageUrl] ?? imageUrl
+}
+
 const PLACEHOLDER_GRADIENTS = [
   'from-blue-900/60 via-electric-blue/10 to-cyan-900/40',
   'from-indigo-900/60 via-purple-900/30 to-blue-900/40',
@@ -20,6 +38,8 @@ function getGradient(id: string) {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+  const resolvedImage = resolveImage(project.imageUrl)
+
   return (
     <motion.div
       whileHover={{ y: -6 }}
@@ -29,9 +49,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     >
       {/* Image / Placeholder */}
       <div className="relative w-full h-48 overflow-hidden">
-        {project.imageUrl ? (
+        {resolvedImage ? (
           <Image
-            src={project.imageUrl}
+            src={resolvedImage}
             alt={project.title}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-108"
