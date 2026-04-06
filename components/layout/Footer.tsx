@@ -12,9 +12,7 @@ export default function Footer() {
 
       <div className="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
         <p className="text-text-dim">
-          © {currentYear}{' '}
-          <span className="text-text-muted font-medium">Rahmat Sigit Hidayat</span>
-          . All rights reserved.
+          
         </p>
         <motion.a
           href="#hero"
