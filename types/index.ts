@@ -18,10 +18,16 @@ export interface SkillCategory {
 
 export type ProjectType = 'data' | 'creative'
 
+export type ContentBlock =
+  | { type: 'text'; value: string }
+  | { type: 'image'; src: string; alt?: string }
+
 export interface Project {
   id: string
+  slug?: string
   title: string
   description: string
+  content?: string | ContentBlock[]
   techTags: string[]
   type?: ProjectType
   imageUrl?: string
@@ -30,6 +36,11 @@ export interface Project {
   publicationUrl?: string
   documentationUrl?: string
   youtubeUrl?: string
+  embedUrl?: string
+  embedHtml?: string
+  embedDocs?: string
+  embedHeightDesktop?: number
+  embedHeightMobile?: number
 }
 
 export interface Experience {

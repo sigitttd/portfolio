@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import '@fontsource-variable/inter'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
+import HashScrollHandler from '@/components/ui/HashScrollHandler'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="font-sans bg-orbit-navy text-text-primary antialiased">
         <Navbar />
+        <HashScrollHandler />
         <main>{children}</main>
         <Footer />
       </body>

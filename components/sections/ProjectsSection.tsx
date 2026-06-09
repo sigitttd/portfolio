@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import AnimatedSection from '@/components/ui/AnimatedSection'
 import SectionWrapper from '@/components/ui/SectionWrapper'
@@ -121,6 +122,23 @@ export default function ProjectsSection({ projects }: ProjectsSectionProps) {
             </motion.p>
           )}
         </AnimatePresence>
+
+        <AnimatedSection delay={0.1}>
+          <div className="flex justify-center mt-10">
+            <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
+              <Link
+                href="/projects"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl border border-electric-blue/40 text-electric-blue text-sm font-medium
+                  hover:bg-electric-blue/10 hover:border-electric-blue transition-all duration-200"
+              >
+                View All Projects
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </motion.div>
+          </div>
+        </AnimatedSection>
       </SectionWrapper>
     </div>
   )

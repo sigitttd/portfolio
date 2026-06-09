@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const NAV_LINKS = [
@@ -15,10 +16,14 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
+  const isHome = pathname === '/'
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
+      if (!isHome) return
       const scrollY = window.scrollY
       const threshold = window.innerHeight * 0.35
       let current: string | null = null
@@ -33,7 +38,41 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [isHome])
+
+  // Reset active section when leaving home
+  useEffect(() => {
+    if (!isHome) setActiveSection(null)
+  }, [isHome])
+
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent, id: string) => {
+      setMenuOpen(false)
+      if (isHome) {
+        // Smooth scroll in-page
+        e.preventDefault()
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        // Navigate to home then scroll
+        e.preventDefault()
+        router.push(`/#${id}`)
+      }
+    },
+    [isHome, router],
+  )
+
+  const handleLogoClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (isHome) {
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        e.preventDefault()
+        router.push('/#hero')
+      }
+    },
+    [isHome, router],
+  )
 
   return (
     <motion.header
@@ -49,7 +88,8 @@ export default function Navbar() {
       <nav className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <motion.a
-          href="#hero"
+          href={isHome ? '#hero' : '/'}
+          onClick={handleLogoClick}
           whileHover={{ scale: 1.04 }}
           transition={{ type: 'spring', stiffness: 400, damping: 20 }}
           className="text-text-primary font-bold text-lg tracking-tight hover:text-electric-blue transition-colors duration-200"
@@ -60,11 +100,12 @@ export default function Navbar() {
         {/* Desktop links */}
         <ul className="hidden md:flex items-center gap-1">
           {NAV_LINKS.map(({ label, href, id }) => {
-            const isActive = activeSection === id
+            const isActive = isHome && activeSection === id
             return (
               <li key={id} className="relative">
                 <a
-                  href={href}
+                  href={isHome ? href : `/${href}`}
+                  onClick={(e) => handleNavClick(e, id)}
                   className={`relative px-3 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 block ${
                     isActive
                       ? 'text-electric-blue'
@@ -136,13 +177,13 @@ export default function Navbar() {
               {NAV_LINKS.map(({ label, href, id }, i) => (
                 <motion.a
                   key={id}
-                  href={href}
+                  href={isHome ? href : `/${href}`}
+                  onClick={(e) => handleNavClick(e, id)}
                   initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05, duration: 0.3, ease: 'easeOut' }}
-                  onClick={() => setMenuOpen(false)}
                   className={`block px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                    activeSection === id
+                    isHome && activeSection === id
                       ? 'text-electric-blue bg-electric-blue/10 border border-electric-blue/20'
                       : 'text-text-muted hover:text-text-primary hover:bg-surface'
                   }`}

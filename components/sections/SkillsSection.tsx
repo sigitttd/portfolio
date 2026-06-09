@@ -13,17 +13,15 @@ interface SkillsSectionProps {
 }
 
 const CATEGORY_ICONS: Record<string, string> = {
-  'Data & Analysis': '📊',
-  'Programming & Libraries': '💻',
-  'Data Visualization & BI Tools': '📈',
-  'Soft & Creative Skills': '🎨',
+  'Data Analytics': '📊',
+  'Tools & Technologies': '💻',
+  'Professional Skills': '🎨',
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  'Data & Analysis': 'from-electric-blue/10 to-transparent',
-  'Programming & Libraries': 'from-cyan-accent/8 to-transparent',
-  'Data Visualization & BI Tools': 'from-electric-blue/8 to-transparent',
-  'Soft & Creative Skills': 'from-cyan-accent/6 to-transparent',
+  'Data Analytics': 'from-electric-blue/10 to-transparent',
+  'Tools & Technologies': 'from-cyan-accent/8 to-transparent',
+  'Professional Skills': 'from-electric-blue/8 to-transparent',
 }
 
 export default function SkillsSection({ skills }: SkillsSectionProps) {
