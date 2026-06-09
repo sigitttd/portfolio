@@ -282,7 +282,7 @@ export default function ProjectDetailClient({ project }: Props) {
             {/* Mobile instruction */}
             <p className="text-xs text-text-muted mt-3 md:hidden flex items-center gap-1.5">
               <span>💡</span>
-              <span><strong>Tip:</strong> Looker Studio dashboards are best viewed on desktop screens. Drag to navigate or click "Live Demo" to view full screen.</span>
+              <span><strong>Tip:</strong> Looker Studio dashboards are best viewed on desktop screens. Drag to navigate or click &ldquo;Live Demo&rdquo; to view full screen.</span>
             </p>
           </motion.div>
         )}
