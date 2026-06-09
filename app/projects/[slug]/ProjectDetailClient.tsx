@@ -124,7 +124,11 @@ export default function ProjectDetailClient({ project }: Props) {
     { url: project.liveUrl, label: 'Live Demo', icon: 'external' },
     { url: project.publicationUrl, label: 'Publication', icon: 'doc' },
     { url: project.documentationUrl, label: 'Documentation', icon: 'doc' },
-    { url: project.youtubeUrl, label: 'YouTube', icon: 'external' },
+    {
+      url: project.youtubeUrl,
+      label: project.youtubeUrl?.includes('instagram.com') ? 'Instagram' : 'YouTube',
+      icon: 'external',
+    },
   ].filter((l) => l.url)
 
   return (

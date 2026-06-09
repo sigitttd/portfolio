@@ -646,6 +646,7 @@ techTags: ['Video Production', 'Scriptwriting', 'Directing', 'Content Creation']
   ],
 
   imageUrl: '/pictinporto/ig.png',
+  youtubeUrl: 'https://www.instagram.com/lotk.8l/',
 }
 
 ]
